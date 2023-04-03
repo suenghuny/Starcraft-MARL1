@@ -205,9 +205,7 @@ class Agent:
                  GNN,
                  teleport_probability,
                  gtn_beta):
-        torch.manual_seed(81)
-        random.seed(81)
-        np.random.seed(81)
+
         self.num_agent = num_agent
         self.num_enemy = num_enemy
         self.feature_size = feature_size
@@ -251,8 +249,7 @@ class Agent:
             self.Q_tar = Network(n_representation_comm + n_representation_obs, hidden_size_Q).to(device)
             self.Q_tar.load_state_dict(self.Q.state_dict())
             self.node_representation_enemy_obs = NodeEmbedding(feature_size=feature_size, hidden_size=hidden_size_obs,
-                                                               n_representation_obs=n_representation_obs).to(
-                device)  # 수정사항
+                                                               n_representation_obs=n_representation_obs).to(device)  # 수정사항
             self.node_representation = NodeEmbedding(feature_size=feature_size - 1, hidden_size=hidden_size_obs,
                                                      n_representation_obs=n_representation_obs).to(device)  # 수정사항
             self.action_representation = NodeEmbedding(feature_size=feature_size + 6 - 1, hidden_size=hidden_size_obs,

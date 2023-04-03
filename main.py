@@ -8,6 +8,8 @@ import sys
 import os
 import time
 from cfg import get_cfg
+import torch
+import random
 cfg = get_cfg()
 
 vessl_on = cfg.vessl
@@ -38,6 +40,7 @@ GNN = cfg.GNN
 heterogenous = False
 
 """
+
 Protoss
 colossi : 200.0150.01.0
 stalkers : 80.080.00.625
@@ -53,7 +56,11 @@ zergling : 35.00.00.375
 hydralisk : 80.00.00.625
 baneling : 30.00.00.375
 spine crawler : 300.00.01.125`
+
 """
+torch.manual_seed(81)
+random.seed(81)
+np.random.seed(81)
 
 def evaluation(env, agent, num_eval):
     max_episode_len = env.episode_limit
@@ -220,10 +227,6 @@ def main():
         os.makedirs(log_dir)
 
     initializer = True
-    # writer = SummaryWriter(log_dir,
-    #                        comment="map_name_{}_GNN_{}_lr_{}_hiddensizeobs_{}_hiddensizeq_{}_nrepresentationobs_{}_nrepresentationcomm_{}.csv".format(
-    #                            map_name1, GNN, learning_rate, hidden_size_obs, hidden_size_Q, n_representation_obs,
-    #                            n_representation_comm))
     agent1 = Agent(num_agent=env1.get_env_info()["n_agents"],
                    num_enemy=env1.get_env_info()["n_enemies"],
                    feature_size=env1.get_env_info()["node_features"],
@@ -253,6 +256,7 @@ def main():
     t = 0
     epi_r = []
     win_rates = []
+
     for e in range(num_episode):
         episode_reward, epsilon, t, eval = train(agent1, env1, e, t, train_start, epsilon, min_epsilon, anneal_epsilon, initializer, output_dir, model_save_freq)
         initializer = False
